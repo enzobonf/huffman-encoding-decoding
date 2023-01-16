@@ -12,6 +12,7 @@ class Arquivo {
     public:
         Arquivo(string momeArq);
         void lerArquivo();
+        static void escreverArquivoBinario(string stringBinaria, string filename);
         string conteudoArq;
 };
 

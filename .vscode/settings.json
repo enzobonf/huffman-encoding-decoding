@@ -1,5 +1,6 @@
 {
     "editor.formatOnSave": false,
+    "editor.saveBeforeRun": true,
     "files.associations": {
         "vector": "cpp",
         "xstring": "cpp",
@@ -44,6 +45,7 @@
         "xlocbuf": "cpp",
         "xlocmes": "cpp",
         "xlocmon": "cpp",
-        "xloctime": "cpp"
+        "xloctime": "cpp",
+        "unordered_map": "cpp"
     }
 }

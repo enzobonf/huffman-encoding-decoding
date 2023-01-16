@@ -10,13 +10,18 @@ Arquivo::Arquivo(string nomeArq){
 
 void Arquivo::lerArquivo(){
     ifstream fin(this->nomeArq.c_str());
-    string arqCompleto;
-    char ch;
+    string arqCompleto; char ch;
 
     while(fin.get(ch)){
         arqCompleto += ch;
     }
 
-    //cout << arqCompleto << endl;
+    fin.close();
     this->conteudoArq = arqCompleto;
+}
+
+void Arquivo::escreverArquivoBinario(string stringBinaria, string filename){
+    ofstream outFile(filename.c_str(), ios::binary);
+    outFile.write(stringBinaria.c_str(), stringBinaria.size());
+    outFile.close();
 }

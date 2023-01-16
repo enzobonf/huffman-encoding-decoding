@@ -11,6 +11,12 @@ int main() {
   Arquivo *arq = new Arquivo("salve.txt");
   arq->lerArquivo();
 
-  construirArvoreHuffman(arq->conteudoArq);
+  ArvoreH raiz = construirArvoreHuffman(arq->conteudoArq);
+  auto tabelaCodigos = encodeHuffmanTree(raiz);
+
+  string arquivoEncoded = encodeArquivo(arq->conteudoArq, tabelaCodigos);
+  cout << arquivoEncoded.length();
+
+  Arquivo::escreverArquivoBinario(arquivoEncoded, "out.bin");
   
 }

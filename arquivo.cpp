@@ -17,6 +17,6 @@ void Arquivo::lerArquivo(){
         arqCompleto += ch;
     }
 
-    cout << arqCompleto << endl;
+    //cout << arqCompleto << endl;
     this->conteudoArq = arqCompleto;
 }

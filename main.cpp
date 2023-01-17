@@ -1,6 +1,5 @@
-#include "arquivo.cpp"
-#include "estruturas.cpp"
-#include <cstdlib>
+#include "arquivo.h"
+#include "estruturas.h"
 
 using namespace std;
 
@@ -11,12 +10,13 @@ int main() {
   Arquivo *arq = new Arquivo("salve.txt");
   arq->lerArquivo();
 
+
   ArvoreH raiz = construirArvoreHuffman(arq->conteudoArq);
-  auto tabelaCodigos = encodeHuffmanTree(raiz);
+  auto tabelaCodigos = gerarTabelaCodigos(raiz);
 
-  string arquivoEncoded = encodeArquivo(arq->conteudoArq, tabelaCodigos);
-  cout << arquivoEncoded.length();
+  string stringBinaria = encodeArquivo(arq->conteudoArq, tabelaCodigos);
+  Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, "out.bin");
 
-  Arquivo::escreverArquivoBinario(arquivoEncoded, "out.bin");
+  //Arquivo::lerArquivoBinario();
   
 }

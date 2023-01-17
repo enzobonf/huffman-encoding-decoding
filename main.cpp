@@ -10,13 +10,16 @@ int main() {
   Arquivo *arq = new Arquivo("salve.txt");
   arq->lerArquivo();
 
-
   ArvoreH raiz = construirArvoreHuffman(arq->conteudoArq);
   auto tabelaCodigos = gerarTabelaCodigos(raiz);
 
-  string stringBinaria = encodeArquivo(arq->conteudoArq, tabelaCodigos);
-  Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, "out.bin");
+  string stringBinaria = gerarBitString(arq->conteudoArq, tabelaCodigos);
+  
+  //cout << decodeArquivo(stringBinaria, tabelaCodigos)[0];
 
-  //Arquivo::lerArquivoBinario();
+  //Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, "out.bin");
+  Arquivo::lerArquivoBinario();
+
+  //cout << sizeof(CabecalhoHuffman);
   
 }

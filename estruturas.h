@@ -36,17 +36,13 @@ struct Compare {
 };
 
 struct CabecalhoHuffman {
-    unsigned int nBytes;
-    TabelaHuffman tabela;
-
-    CabecalhoHuffman(unsigned int nBytes, TabelaHuffman tabela){
-        this->nBytes = nBytes;
-        this->tabela = tabela;
-    }
+    size_t nBytes;
+    size_t tamTabela;
 };
 
 ArvoreH construirArvoreHuffman(string text);
 TabelaHuffman gerarTabelaCodigos(ArvoreH raiz);
-string encodeArquivo(string conteudoArq, TabelaHuffman tabelaCodigos);
+string gerarBitString(string conteudoArq, TabelaHuffman tabelaCodigos);
+string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos);
 
 #endif

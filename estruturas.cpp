@@ -48,7 +48,7 @@ TabelaHuffman gerarTabelaCodigos(ArvoreH raiz){
 
 }
 
-string encodeArquivo(string conteudoArq, TabelaHuffman tabelaCodigos){
+string gerarBitString(string conteudoArq, TabelaHuffman tabelaCodigos){
 
     string encodedText = "";
 
@@ -58,4 +58,21 @@ string encodeArquivo(string conteudoArq, TabelaHuffman tabelaCodigos){
 
     return encodedText;
 
+}
+
+string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos){
+
+    string buffer = "", resultado = "";
+    for(char bit : bitString){
+        buffer += bit;
+
+        for(auto pair : tabelaCodigos){ // O(n de caracteres diferentes no texto)
+            if(pair.second == buffer){
+                resultado += pair.first;
+                buffer = "";
+            }
+        }
+    }
+
+    return resultado;
 }

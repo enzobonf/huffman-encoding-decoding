@@ -3,6 +3,7 @@
 #include <cmath>
 #include <vector>
 #include <bitset>
+#include <cstdio>
 
 #include "arquivo.h"
 #include "estruturas.h"
@@ -26,67 +27,87 @@ void Arquivo::lerArquivo(){
 }
 
 void gerarBitset(string str, vector<bitset<8>> &bit_set){
-    
-    //cout << "str: " << str << endl;
     string byteStr = "";
     size_t sizeStr = str.length();
-
-    int completarZeros = sizeStr < 8 ? 8 - str.length() : 0;
-
-    for(int i = 0; i < completarZeros; i++){
-        str += '0';
+    
+    for(int i = 0; i < str.size(); i += 8){
+        bit_set.push_back(bitset<8>(str.substr(i, 8)));
     }
-
-    for(int i = 0; i < 8 && str[i] != '\0'; i++){
-        byteStr += str[i];
-    }
-
-    //cout << byteStr << endl;
-    bit_set.push_back(bitset<8>(byteStr));
-
-    if(sizeStr > 8){
-        gerarBitset(&str[8], bit_set);
-    }
-
 }
 
 void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffman tabela, string filename){
-    string bit_string = "10101010";
     vector<bitset<8>> vetorBits;
 
     gerarBitset(stringBinaria, vetorBits);
-    ofstream file(filename.c_str(), ios::binary);
+    cout << vetorBits.size();
 
-    CabecalhoHuffman *cab = new CabecalhoHuffman(vetorBits.size(), tabela);
+    unsigned int map_size = tabela.size();
+    CabecalhoHuffman cab = {vetorBits.size(), map_size};
 
-    file.write((const char*)cab, sizeof(cab));
-    
-    for(auto& bits : vetorBits){
-        file.write((const char*)&bits, 1);
+    FILE *file = fopen("out.bin", "wb");
+    fwrite(&cab, sizeof(CabecalhoHuffman), 1, file);
+
+    for (auto pair : tabela) {
+        fwrite(&pair.first, sizeof(char), 1, file);
+        size_t value_size = pair.second.size();
+        fwrite(&value_size, sizeof(size_t), 1, file);
+        fwrite(pair.second.c_str(), value_size, 1, file);
     }
 
-    file.close();
+    for(auto& bits : vetorBits){
+        fwrite((const char*)&bits, 1, 1, file);
+    }
+
+    fclose(file);
 }
 
 void Arquivo::lerArquivoBinario(){
-    ifstream fin("out.bin", ios::binary);
+    //ifstream fin("out.bin", ios::binary);
+    FILE *file = fopen("out.bin", "rb+");
     bitset<8> bytee;
 
     int i = 0;
 
-    CabecalhoHuffman *cb;
+    CabecalhoHuffman *cab = (CabecalhoHuffman*) malloc(sizeof(CabecalhoHuffman));
+    size_t map_size;
 
-    fin.read((char*)&cb, sizeof(cb));
+    /* fin.read(reinterpret_cast<char*>(&cab), sizeof(CabecalhoHuffman));
+    fin.read(reinterpret_cast<char*>(&map_size), sizeof(size_t)); */
+    fseek(file, 0, SEEK_SET);
 
-    cout << "n bytes: " << cb->nBytes << endl;
-    cout << cb->tabela['L'];
+    fread(cab, sizeof(CabecalhoHuffman), 1, file);
 
-    /* while(!fin.eof()){
-        i++;
-        fin.read((char*)&bytee, 1);
-        cout << bytee.all();
+    cout << "n bytes: " << cab->nBytes << " | size: " << cab->tamTabela << endl;
+
+    TabelaHuffman tabela; vector<bitset<8>> vetorBits;
+    vetorBits.resize(cab->nBytes);
+
+    /* for(size_t i = 0; i < cab->tamTabela; i++){
+        char key;
+        size_t value_size;
+        string value;
+
+        fread(&key, sizeof(char), 1, file);
+        fread(&value_size, sizeof(size_t), 1, file);
+
+        value.resize(value_size);
+        fread((char*)(&value), value_size, 1, file);
+        tabela[key] = value;
     } */
 
-    //cout << i;
+    //fread(&vetorBits, 1, cab->nBytes, file);
+
+    for(int i = 0; i < cab->nBytes; i++){
+        fread(&vetorBits[i], 1, 1, file);
+    }
+
+
+    cout << vetorBits.size();
+
+    /* for(auto pair: tabela){
+        cout << "key: " << pair.first << " " << pair.second << endl;
+    } */
+
+    fclose(file);
     
 }

@@ -46,6 +46,12 @@
         "xlocmes": "cpp",
         "xlocmon": "cpp",
         "xloctime": "cpp",
-        "unordered_map": "cpp"
+        "algorithm": "cpp",
+        "bitset": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "queue": "cpp",
+        "unordered_map": "cpp",
+        "xhash": "cpp"
     }
 }

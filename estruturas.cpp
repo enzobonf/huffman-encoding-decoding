@@ -1,37 +1,4 @@
-#include <iostream>
-#include <string>
-#include <unordered_map>
-#include <queue>
-#include <cstdlib>
-
-using namespace std;
-
-struct No {
-    char ch;
-    int freq;
-    No *esq, *dir;
-
-    No(char ch, int freq){
-        this->ch = ch;
-        this->freq = freq;
-        this->esq = this->dir = nullptr;
-    }
-
-    No(char ch, int freq, No* esq, No* dir){
-        this->ch = ch;
-        this->freq = freq;
-        this->esq = esq;
-        this->dir = dir;
-    }
-};
-
-typedef struct No* ArvoreH;
-typedef unordered_map<char, string> TabelaHuffman;
-struct Compare {
-    bool operator()(No *esq, No *dir){
-        return esq->freq > dir->freq;
-    }
-};
+#include "estruturas.h"
 
 ArvoreH construirArvoreHuffman(string text){
     unordered_map<char, int> freq;
@@ -54,29 +21,28 @@ ArvoreH construirArvoreHuffman(string text){
     }
 
     return fila.top();
-
 }
 
-void encodeHuffmanTreeAux(ArvoreH raiz, string str, TabelaHuffman &tabelaCodigos){
+void gerarTabelaCodigosAux(ArvoreH raiz, string str, TabelaHuffman &tabelaCodigos){
 
     if(raiz == nullptr) return;
 
     if(!raiz->esq && !raiz->dir){ // folha
-        cout << raiz->ch << endl;
+        //cout << raiz->ch << endl;
         //cout << str << endl;
         tabelaCodigos[raiz->ch] = str; //adiciona o código na tabela;
     }
 
-    encodeHuffmanTreeAux(raiz->esq, str + "0", tabelaCodigos);
-    encodeHuffmanTreeAux(raiz->dir, str + "1", tabelaCodigos);
+    gerarTabelaCodigosAux(raiz->esq, str + "0", tabelaCodigos);
+    gerarTabelaCodigosAux(raiz->dir, str + "1", tabelaCodigos);
 
 }
 
-TabelaHuffman encodeHuffmanTree(ArvoreH raiz){
+TabelaHuffman gerarTabelaCodigos(ArvoreH raiz){
 
     unordered_map<char, string> tabelaCodigos;
     string str = "";
-    encodeHuffmanTreeAux(raiz, str, tabelaCodigos);
+    gerarTabelaCodigosAux(raiz, str, tabelaCodigos);
 
     return tabelaCodigos;
 

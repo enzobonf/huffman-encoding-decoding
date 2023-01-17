@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <unordered_map>
+#include "estruturas.h"
 
 using namespace std;
 
@@ -12,7 +14,8 @@ class Arquivo {
     public:
         Arquivo(string momeArq);
         void lerArquivo();
-        static void escreverArquivoBinario(string stringBinaria, string filename);
+        static void escreverArquivoBinario(string stringBinaria, TabelaHuffman tabela, string filename);
+        static void lerArquivoBinario();
         string conteudoArq;
 };
 

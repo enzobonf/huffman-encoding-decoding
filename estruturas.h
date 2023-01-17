@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <queue>
 #include <cstdlib>
+#include <bitset>
 using namespace std;
 
 #ifndef ESTRUTURAS_H
@@ -38,6 +39,12 @@ struct Compare {
 struct CabecalhoHuffman {
     size_t nBytes;
     size_t tamTabela;
+};
+
+struct ArquivoHuffman {
+    size_t nBytes;
+    TabelaHuffman tabelaCodigos;
+    vector<bitset<8>> vetorBits;
 };
 
 ArvoreH construirArvoreHuffman(string text);

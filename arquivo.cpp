@@ -4,6 +4,7 @@
 #include <vector>
 #include <bitset>
 #include <cstdio>
+#include <string.h>
 
 #include "arquivo.h"
 #include "estruturas.h"
@@ -61,20 +62,16 @@ void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffman tabela,
     fclose(file);
 }
 
-void Arquivo::lerArquivoBinario(){
+ArquivoHuffman Arquivo::lerArquivoBinario(){
     //ifstream fin("out.bin", ios::binary);
     FILE *file = fopen("out.bin", "rb+");
-    bitset<8> bytee;
 
     int i = 0;
 
     CabecalhoHuffman *cab = (CabecalhoHuffman*) malloc(sizeof(CabecalhoHuffman));
     size_t map_size;
 
-    /* fin.read(reinterpret_cast<char*>(&cab), sizeof(CabecalhoHuffman));
-    fin.read(reinterpret_cast<char*>(&map_size), sizeof(size_t)); */
     fseek(file, 0, SEEK_SET);
-
     fread(cab, sizeof(CabecalhoHuffman), 1, file);
 
     cout << "n bytes: " << cab->nBytes << " | size: " << cab->tamTabela << endl;
@@ -82,32 +79,23 @@ void Arquivo::lerArquivoBinario(){
     TabelaHuffman tabela; vector<bitset<8>> vetorBits;
     vetorBits.resize(cab->nBytes);
 
-    /* for(size_t i = 0; i < cab->tamTabela; i++){
-        char key;
-        size_t value_size;
-        string value;
+    for(int i = 0; i < cab->tamTabela; i++){
+        char key; size_t value_size; string value;
 
         fread(&key, sizeof(char), 1, file);
         fread(&value_size, sizeof(size_t), 1, file);
 
         value.resize(value_size);
-        fread((char*)(&value), value_size, 1, file);
+        fread((char*)(value.data()), value_size, 1, file);
         tabela[key] = value;
-    } */
-
-    //fread(&vetorBits, 1, cab->nBytes, file);
+    }
 
     for(int i = 0; i < cab->nBytes; i++){
         fread(&vetorBits[i], 1, 1, file);
     }
 
-
-    cout << vetorBits.size();
-
-    /* for(auto pair: tabela){
-        cout << "key: " << pair.first << " " << pair.second << endl;
-    } */
-
     fclose(file);
+
+    return {cab->nBytes, tabela, vetorBits};
     
 }

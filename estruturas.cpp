@@ -49,15 +49,13 @@ TabelaHuffman gerarTabelaCodigos(ArvoreH raiz){
 }
 
 string gerarBitString(string conteudoArq, TabelaHuffman tabelaCodigos){
-
     string encodedText = "";
 
     for(char ch : conteudoArq){
-        encodedText += tabelaCodigos[ch];
+        if(ch) encodedText += tabelaCodigos[ch];
     }
 
     return encodedText;
-
 }
 
 string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos){

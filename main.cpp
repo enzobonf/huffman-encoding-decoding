@@ -15,10 +15,12 @@ int main() {
 
   string stringBinaria = gerarBitString(arq->conteudoArq, tabelaCodigos);
   
-  //cout << decodeArquivo(stringBinaria, tabelaCodigos)[0];
+  cout << decodeArquivo(stringBinaria, tabelaCodigos)[0];
 
   //Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, "out.bin");
-  Arquivo::lerArquivoBinario();
+  auto arquivoLido = Arquivo::lerArquivoBinario();
+  cout << arquivoLido.nBytes;
+
 
   //cout << sizeof(CabecalhoHuffman);
   

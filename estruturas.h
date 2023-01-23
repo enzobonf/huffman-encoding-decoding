@@ -28,8 +28,30 @@ struct No {
     }
 };
 
-typedef struct No* ArvoreH;
-typedef unordered_map<char, string> TabelaHuffman;
+struct NoPalavra {
+    string palavra;
+    int freq;
+    NoPalavra *esq, *dir;
+
+    NoPalavra(string palavra, int freq){
+        this->palavra = palavra;
+        this->freq = freq;
+        this->esq = this->dir = nullptr;
+    }
+
+    NoPalavra(string palavra, int freq, NoPalavra* esq, NoPalavra* dir){
+        this->palavra = palavra;
+        this->freq = freq;
+        this->esq = esq;
+        this->dir = dir;
+    }
+};
+
+typedef struct No* ArvoreHChar;
+typedef struct NoOPalavra* ArvoreHPalavra;
+
+typedef unordered_map<char, string> TabelaHuffmanChar;
+typedef unordered_map<string, string> TabelaHuffmanPalavra;
 struct Compare {
     bool operator()(No *esq, No *dir){
         return esq->freq > dir->freq;
@@ -41,15 +63,33 @@ struct CabecalhoHuffman {
     size_t tamTabela;
 };
 
-struct ArquivoHuffman {
+struct ArqHuffmanChar {
     size_t nBytes;
-    TabelaHuffman tabelaCodigos;
-    vector<bitset<8>> vetorBits;
+    TabelaHuffmanChar tabelaCodigos;
+    vector<bitset<8>> vetorBytes;
+
+    ArqHuffmanChar(size_t nBytes, TabelaHuffmanChar tabelaCodigos, vector<bitset<8>> vetorBytes){
+        this->nBytes = nBytes;
+        this->tabelaCodigos = tabelaCodigos;
+        this->vetorBytes = vetorBytes;
+    }
 };
 
-ArvoreH construirArvoreHuffman(string text);
-TabelaHuffman gerarTabelaCodigos(ArvoreH raiz);
-string gerarBitString(string conteudoArq, TabelaHuffman tabelaCodigos);
-string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos);
+struct ArqHuffmanPalavra {
+    size_t nBytes;
+    TabelaHuffmanPalavra tabelaCodigos;
+
+    ArqHuffmanPalavra(size_t nBytes, TabelaHuffmanPalavra tabelaCodigos, vector<bitset<8>> vetorBytes){
+        this->nBytes = nBytes;
+        this->tabelaCodigos = tabelaCodigos;
+        //this->vetorBytes = vetorBytes;
+    }
+};
+
+ArvoreHChar construirArvoreHuffmanChar(string text);
+TabelaHuffmanChar gerarTabelaCodigosChar(ArvoreHChar raiz);
+string gerarBitString(string conteudoArq, TabelaHuffmanChar tabelaCodigos);
+string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos);
+string decodeArquivoCaractere(ArqHuffmanChar *arq);
 
 #endif

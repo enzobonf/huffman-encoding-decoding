@@ -1,6 +1,6 @@
 #include "estruturas.h"
 
-ArvoreH construirArvoreHuffman(string text){
+ArvoreHChar construirArvoreHuffmanChar(string text){
     unordered_map<char, int> freq;
     for(char ch : text){ // O(tamanho do texto em caracteres)
         freq[ch]++;
@@ -23,32 +23,30 @@ ArvoreH construirArvoreHuffman(string text){
     return fila.top();
 }
 
-void gerarTabelaCodigosAux(ArvoreH raiz, string str, TabelaHuffman &tabelaCodigos){
+void gerarTabelaCodigosCharAux(ArvoreHChar raiz, string str, TabelaHuffmanChar &tabelaCodigos){
 
     if(raiz == nullptr) return;
 
     if(!raiz->esq && !raiz->dir){ // folha
-        //cout << raiz->ch << endl;
-        //cout << str << endl;
         tabelaCodigos[raiz->ch] = str; //adiciona o código na tabela;
     }
 
-    gerarTabelaCodigosAux(raiz->esq, str + "0", tabelaCodigos);
-    gerarTabelaCodigosAux(raiz->dir, str + "1", tabelaCodigos);
+    gerarTabelaCodigosCharAux(raiz->esq, str + "0", tabelaCodigos);
+    gerarTabelaCodigosCharAux(raiz->dir, str + "1", tabelaCodigos);
 
 }
 
-TabelaHuffman gerarTabelaCodigos(ArvoreH raiz){
+TabelaHuffmanChar gerarTabelaCodigosChar(ArvoreHChar raiz){
 
     unordered_map<char, string> tabelaCodigos;
     string str = "";
-    gerarTabelaCodigosAux(raiz, str, tabelaCodigos);
+    gerarTabelaCodigosCharAux(raiz, str, tabelaCodigos);
 
     return tabelaCodigos;
 
 }
 
-string gerarBitString(string conteudoArq, TabelaHuffman tabelaCodigos){
+string gerarBitString(string conteudoArq, TabelaHuffmanChar tabelaCodigos){
     string encodedText = "";
 
     for(char ch : conteudoArq){
@@ -58,7 +56,7 @@ string gerarBitString(string conteudoArq, TabelaHuffman tabelaCodigos){
     return encodedText;
 }
 
-string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos){
+string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 
     string buffer = "", resultado = "";
     for(char bit : bitString){
@@ -66,6 +64,7 @@ string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos){
 
         for(auto pair : tabelaCodigos){ // O(n de caracteres diferentes no texto)
             if(pair.second == buffer){
+                cout << pair.first;
                 resultado += pair.first;
                 buffer = "";
             }
@@ -73,4 +72,14 @@ string decodeArquivo(string bitString, TabelaHuffman tabelaCodigos){
     }
 
     return resultado;
+}
+
+string decodeArquivoCaractere(ArqHuffmanChar *arq){
+
+    /* string buffer;
+
+    for(int i = 0; i < arq->nBytes; i++){
+        cout << i << endl;
+    } */
+
 }

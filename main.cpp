@@ -7,21 +7,24 @@ int main() {
 
   setlocale(LC_ALL, "utf-8");
 
-  Arquivo *arq = new Arquivo("salve.txt");
+  Arquivo *arq = new Arquivo("p.txt");
+  string filename = "out.bin";
   arq->lerArquivo();
 
-  ArvoreH raiz = construirArvoreHuffman(arq->conteudoArq);
-  auto tabelaCodigos = gerarTabelaCodigos(raiz);
+  ArvoreHChar raiz = construirArvoreHuffmanChar(arq->conteudoArq);
+  auto tabelaCodigos = gerarTabelaCodigosChar(raiz);
 
   string stringBinaria = gerarBitString(arq->conteudoArq, tabelaCodigos);
+  //cout << stringBinaria << endl;
+  Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, filename);
+
+
+ 	ArqHuffmanChar *arquivoLido = Arquivo::lerArquivoCodificadoCaractere(filename);
   
-  cout << decodeArquivo(stringBinaria, tabelaCodigos)[0];
+  /* for(auto pair : arquivoLido->tabelaCodigos){ // O(n de caracteres diferentes no texto)
+      cout << "key: " << pair.first << " | value: " << pair.second << endl;
+  } */
 
-  //Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, "out.bin");
-  auto arquivoLido = Arquivo::lerArquivoBinario();
-  cout << arquivoLido.nBytes;
+	cout << "-------------------" << endl;
 
-
-  //cout << sizeof(CabecalhoHuffman);
-  
 }

@@ -14,8 +14,8 @@ class Arquivo {
     public:
         Arquivo(string momeArq);
         void lerArquivo();
-        static void escreverArquivoBinario(string stringBinaria, TabelaHuffman tabela, string filename);
-        static ArquivoHuffman lerArquivoBinario();
+        static void escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tabela, string filename);
+        static ArqHuffmanChar* lerArquivoCodificadoCaractere(string filename);
         string conteudoArq;
 };
 

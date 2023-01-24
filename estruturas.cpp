@@ -1,4 +1,5 @@
 #include "estruturas.h"
+#include <chrono>
 
 ArvoreHChar construirArvoreHuffmanChar(string text){
     unordered_map<char, int> freq;
@@ -56,18 +57,36 @@ string gerarBitString(string conteudoArq, TabelaHuffmanChar tabelaCodigos){
     return encodedText;
 }
 
-string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 
+void gerarBitset(string bitString, vector<bitset<8>> &bit_set, short &nFillBits){
+    string byteStr = "";
+    size_t sizeStr = bitString.size();
+    nFillBits = sizeStr % 8;
+    bitString += string(nFillBits, '0'); // completa o último byte com zeros à direita caso seja preciso
+    
+    for(int i = 0; i < sizeStr; i += 8){
+        bit_set.push_back(bitset<8>(bitString.substr(i, 8)));
+    }
+}
+
+template <typename TKey, typename TValue>
+unordered_map<TKey, TValue> inverterTabela(unordered_map<TValue, TKey> tabelaCodigos){
+    unordered_map<TKey, TValue> inverted;
+    for(auto pair : tabelaCodigos){ // O(n de caracteres diferentes no texto original)
+        inverted.insert({pair.second, pair.first});
+    }
+    return inverted;
+}
+
+string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
     string buffer = "", resultado = "";
+    auto tabelaInvertida = inverterTabela(tabelaCodigos);
     for(char bit : bitString){
         buffer += bit;
 
-        for(auto pair : tabelaCodigos){ // O(n de caracteres diferentes no texto)
-            if(pair.second == buffer){
-                cout << pair.first;
-                resultado += pair.first;
-                buffer = "";
-            }
+        if(tabelaInvertida[buffer]){
+            resultado += tabelaInvertida[buffer];
+            buffer = "";
         }
     }
 
@@ -75,11 +94,13 @@ string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 }
 
 string decodeArquivoCaractere(ArqHuffmanChar *arq){
-
-    /* string buffer;
-
+    string buffer; auto vetorBytes = arq->vetorBytes;
     for(int i = 0; i < arq->nBytes; i++){
-        cout << i << endl;
-    } */
+        buffer += vetorBytes[i].to_string();
+    }
 
+    /* if(arq->nFillBits)
+         buffer.erase(buffer.length() - (arq->nFillBits-1)); */
+         
+    return decodeBitString(buffer, arq->tabelaCodigos);
 }

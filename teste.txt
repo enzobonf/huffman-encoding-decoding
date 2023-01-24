@@ -79,4 +79,4 @@ ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
 
     return new ArqHuffmanChar(cab->nBytes, cab->nFillBits, tabela, vetorBytes);
     
-}
+H

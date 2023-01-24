@@ -1,6 +1,11 @@
 #include <iostream>
+#include <cmath>
 #include <string>
 #include <unordered_map>
+#include <vector>
+#include <bitset>
+#include <cstdio>
+#include <string.h>
 #include "estruturas.h"
 
 using namespace std;
@@ -15,6 +20,7 @@ class Arquivo {
         Arquivo(string momeArq);
         void lerArquivo();
         static void escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tabela, string filename);
+        static void escreverArquivoDecodificado(string str, string filename);
         static ArqHuffmanChar* lerArquivoCodificadoCaractere(string filename);
         string conteudoArq;
 };

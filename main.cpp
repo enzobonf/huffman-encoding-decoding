@@ -1,3 +1,4 @@
+#include "menu.cpp"
 #include "arquivo.h"
 #include "estruturas.h"
 #include <chrono>
@@ -6,15 +7,15 @@ using namespace std;
 
 int main() {
 
-  setlocale(LC_ALL, "utf-16");
+  setlocale(LC_ALL, "utf-8");
 
-  Arquivo *arq = new Arquivo("arquivo.cpp");
+  /* Arquivo *arq = new Arquivo("arquivo.cpp");
   string filename = "out.bin";
-  arq->lerArquivo();
+  arq->lerArquivo(); */
 
   //auto start = std::chrono::high_resolution_clock::now();
 
-  ArvoreHChar raiz = construirArvoreHuffmanChar(arq->conteudoArq);
+  /* ArvoreHChar raiz = construirArvoreHuffmanChar(arq->conteudoArq);
   auto tabelaCodigos = gerarTabelaCodigosChar(raiz);
   string stringBinaria = gerarBitString(arq->conteudoArq, tabelaCodigos);
   Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, filename);
@@ -23,7 +24,7 @@ int main() {
  	ArqHuffmanChar *arquivoLido = Arquivo::lerArquivoCodificadoCaractere(filename);
   auto arquivoDecodificado = decodeArquivoCaractere(arquivoLido);
 
-  Arquivo::escreverArquivoDecodificado(arquivoDecodificado, "teste/teste.txt");
+  Arquivo::escreverArquivoDecodificado(arquivoDecodificado, "teste/teste.txt"); */
 
   /* auto end = std::chrono::high_resolution_clock::now();
   auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
@@ -34,5 +35,12 @@ int main() {
   for(auto pair : arquivoLido->tabelaCodigos){ // O(n de caracteres diferentes no texto)
       cout << "key: " << pair.first << " | value: " << pair.second << endl;
   } */
+
+  Menu *menu = new Menu();
+
+  menu->novaOpcao("teste");
+  menu->novaOpcao("teste2");
+
+  menu->mostrar();
 
 }

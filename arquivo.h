@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 #include <string>
+#include <sstream>
 #include <unordered_map>
 #include <vector>
 #include <bitset>

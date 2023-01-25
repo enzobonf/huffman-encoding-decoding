@@ -9,14 +9,14 @@ Arquivo::Arquivo(string nomeArq){
 
 void Arquivo::lerArquivo(){
     ifstream fin(this->nomeArq.c_str());
-    string arqCompleto; char ch;
+    string arqCompleto;
 
-    while(fin.get(ch)){
-        arqCompleto += ch;
-    }
-
+    std::stringstream buffer;
+    buffer << fin.rdbuf();
+    
     fin.close();
-    this->conteudoArq = arqCompleto;
+    buffer.clear();
+    this->conteudoArq = buffer.str();
 }
 
 void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tabela, string filename){
@@ -61,7 +61,7 @@ ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
     fread(cab, sizeof(CabecalhoHuffman), 1, file);
     vetorBytes.resize(cab->nBytes);
 
-    cout << "n bytes: " << cab->nBytes << " | tam tabela: " << cab->tamTabela << " | n fill: " << cab->nFillBits << endl;
+    cout << "n bytes: " << cab->nBytes << " | tam tabela: " << cab->tamTabela << " | n fill: " << cab->nFillBits << '\n';
 
     for(int i = 0; i < cab->tamTabela; i++){
         fread(&key, sizeof(char), 1, file);

@@ -6,6 +6,7 @@
 #include <cstdlib>
 #include <cstdio>
 #include <bitset>
+#include <sstream>
 using namespace std;
 
 #ifndef ESTRUTURAS_H

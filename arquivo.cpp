@@ -11,9 +11,9 @@ void Arquivo::lerArquivo(){
     ifstream fin(this->nomeArq.c_str());
     string arqCompleto;
 
-    std::stringstream buffer;
+    stringstream buffer;
     buffer << fin.rdbuf();
-    
+
     fin.close();
     buffer.clear();
     this->conteudoArq = buffer.str();
@@ -37,7 +37,7 @@ void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tab
     }
 
     for(auto& bits : vetorBytes){
-        fwrite((const char*)&bits, 1, 1, file);
+        fwrite((const char*)&bits, 2, 1, file);
     }
 
     fclose(file);
@@ -46,6 +46,7 @@ void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tab
 void Arquivo::escreverArquivoDecodificado(string str, string filename){
     ofstream fout(filename.c_str());
     fout.write(str.c_str(), str.size());
+    fout.close();
 }
 
 ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
@@ -72,7 +73,7 @@ ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
     }
 
     for(int i = 0; i < cab->nBytes; i++){
-        fread(&vetorBytes[i], 1, 1, file);
+        fread(&vetorBytes[i], 2, 1, file);
     }
 
     fclose(file);

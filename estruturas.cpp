@@ -62,7 +62,7 @@ void gerarBitset(string bitString, vector<bitset<8>> &bit_set, short &nFillBits)
     string byteStr = "";
     size_t sizeStr = bitString.size();
     nFillBits = sizeStr % 8;
-    bitString += string(nFillBits, '0'); // completa o último byte com zeros à direita caso seja preciso
+    //bitString += string(nFillBits, '0'); // completa o último byte com zeros à direita caso seja preciso
     
     for(int i = 0; i < sizeStr; i += 8){
         bit_set.push_back(bitset<8>(bitString.substr(i, 8)));

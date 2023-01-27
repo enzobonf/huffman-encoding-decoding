@@ -7,6 +7,8 @@
 #include <cstdio>
 #include <bitset>
 #include <sstream>
+#include <chrono>
+#include <cstring>
 using namespace std;
 
 #ifndef ESTRUTURAS_H
@@ -51,13 +53,14 @@ struct NoPalavra {
 };
 
 typedef struct No* ArvoreHChar;
-typedef struct NoOPalavra* ArvoreHPalavra;
+typedef struct NoPalavra* ArvoreHPalavra;
 
 typedef unordered_map<char, string> TabelaHuffmanChar;
 typedef unordered_map<string, string> TabelaHuffmanPalavra;
 
+template <typename T>
 struct Compare {
-    bool operator()(No *esq, No *dir){
+    bool operator()(T esq, T dir){
         return esq->freq > dir->freq;
     }
 };
@@ -88,7 +91,7 @@ struct ArqHuffmanPalavra {
     TabelaHuffmanPalavra tabelaCodigos;
     vector<bitset<8>> vetorBytes;
 
-    ArqHuffmanPalavra(size_t nBytes, TabelaHuffmanPalavra tabelaCodigos, vector<bitset<8>> vetorBytes){
+    ArqHuffmanPalavra(size_t nBytes, short nFillBits, TabelaHuffmanPalavra tabelaCodigos, vector<bitset<8>> vetorBytes){
         this->nBytes = nBytes;
         this->nFillBits = nFillBits;
         this->tabelaCodigos = tabelaCodigos;
@@ -97,10 +100,15 @@ struct ArqHuffmanPalavra {
 };
 
 ArvoreHChar construirArvoreHuffmanChar(string text);
+ArvoreHPalavra construirArvoreHuffmanPalavra(string text);
 TabelaHuffmanChar gerarTabelaCodigosChar(ArvoreHChar raiz);
-string gerarBitString(string conteudoArq, TabelaHuffmanChar tabelaCodigos);
+TabelaHuffmanPalavra gerarTabelaCodigosPalavra(ArvoreHPalavra raiz);
+string gerarBitStringCaractere(string conteudoArq, TabelaHuffmanChar tabelaCodigos);
+string gerarBitStringPalavra(string conteudoArq, TabelaHuffmanPalavra tabelaCodigos);
 void gerarBitset(string bitString, vector<bitset<8>> &bit_set, short &nFillBits);
 string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos);
+string decodeBitString(string bitString, TabelaHuffmanPalavra tabelaCodigos);
 string decodeArquivoCaractere(ArqHuffmanChar *arq);
+string decodeArquivoPalavra(ArqHuffmanPalavra *arq);
 
 #endif

@@ -37,7 +37,34 @@ void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tab
     }
 
     for(auto& bits : vetorBytes){
-        fwrite((const char*)&bits, 2, 1, file);
+        fwrite((const char*)&bits, 1, 1, file);
+    }
+
+    fclose(file);
+}
+
+void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanPalavra tabela, string filename){
+    vector<bitset<8>> vetorBytes; short nFillBits; 
+    gerarBitset(stringBinaria, vetorBytes, nFillBits);
+
+    unsigned int map_size = tabela.size();
+    size_t key_size, value_size;
+    CabecalhoHuffman cab = {vetorBytes.size(), map_size, nFillBits};
+
+    FILE *file = fopen(filename.c_str(), "wb");
+    fwrite(&cab, sizeof(CabecalhoHuffman), 1, file);
+
+    for (auto pair : tabela) {
+        key_size = pair.first.length();
+        value_size = pair.second.length();
+        fwrite(&key_size, sizeof(size_t), 1, file);
+        fwrite(pair.first.c_str(), key_size, 1, file);
+        fwrite(&value_size, sizeof(size_t), 1, file);
+        fwrite(pair.second.c_str(), value_size, 1, file);
+    }
+
+    for(auto& bits : vetorBytes){
+        fwrite((const char*)&bits, 1, 1, file);
     }
 
     fclose(file);
@@ -73,11 +100,47 @@ ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
     }
 
     for(int i = 0; i < cab->nBytes; i++){
-        fread(&vetorBytes[i], 2, 1, file);
+        fread(&vetorBytes[i], 1, 1, file);
     }
 
     fclose(file);
 
     return new ArqHuffmanChar(cab->nBytes, cab->nFillBits, tabela, vetorBytes);
+    
+}
+
+ArqHuffmanPalavra* Arquivo::lerArquivoCodificadoPalavra(string filename){
+
+    FILE *file = fopen(filename.c_str(), "rb+");
+
+    CabecalhoHuffman *cab = (CabecalhoHuffman*) malloc(sizeof(CabecalhoHuffman));
+    TabelaHuffmanPalavra tabela; 
+    vector<bitset<8>> vetorBytes;
+    string key; size_t key_size, value_size; string value;
+
+    fseek(file, 0, SEEK_SET);
+    fread(cab, sizeof(CabecalhoHuffman), 1, file);
+    vetorBytes.resize(cab->nBytes);
+
+    cout << "n bytes: " << cab->nBytes << " | tam tabela: " << cab->tamTabela << " | n fill: " << cab->nFillBits << '\n';
+
+    for(int i = 0; i < cab->tamTabela; i++){
+
+        fread(&key_size, sizeof(size_t), 1, file);
+        key.resize(key_size);
+        fread((char*)(key.data()), key_size, 1, file);
+
+        fread(&value_size, sizeof(size_t), 1, file);
+        tabela[key].resize(value_size);
+        fread((char*)(tabela[key].data()), value_size, 1, file);
+    }
+
+    for(int i = 0; i < cab->nBytes; i++){
+        fread(&vetorBytes[i], 1, 1, file);
+    }
+
+    fclose(file);
+
+    return new ArqHuffmanPalavra(cab->nBytes, cab->nFillBits, tabela, vetorBytes);
     
 }

@@ -19,5 +19,7 @@ class Menu {
 
 void codificarArquivoCaractere();
 void decodificarArquivoCaractere();
+void codificarArquivoPalavra();
+void decodificarArquivoPalavra();
 
 #endif

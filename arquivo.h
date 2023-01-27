@@ -21,8 +21,10 @@ class Arquivo {
         Arquivo(string momeArq);
         void lerArquivo();
         static void escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tabela, string filename);
+        static void escreverArquivoBinario(string stringBinaria, TabelaHuffmanPalavra tabela, string filename);
         static void escreverArquivoDecodificado(string str, string filename);
         static ArqHuffmanChar* lerArquivoCodificadoCaractere(string filename);
+        static ArqHuffmanPalavra* lerArquivoCodificadoPalavra(string filename);
         string conteudoArq;
 };
 

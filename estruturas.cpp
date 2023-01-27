@@ -31,14 +31,16 @@ ArvoreHPalavra construirArvoreHuffmanPalavra(string text){
             str += ' ';
             str += ch;
             str += ' ';
-            freq[" "]--;
+            freq[" "] -= 2;
         }
         else{
             str += ch;
         }
     }
 
+    cout << str << endl;
     char *token = strtok((char *)str.c_str(), " ");
+
 
     while(token != nullptr){
         //cout << token  << '\n';
@@ -135,9 +137,11 @@ string gerarBitStringPalavra(string conteudoArq, TabelaHuffmanPalavra tabelaCodi
         }
     }
 
-    char *token = strtok((char *)conteudoArq.c_str(), " ");
+    cout << str << endl;
+
+    char *token = strtok((char *)str.c_str(), " ");
     while(token != nullptr){
-        //cout << token  << '\n';
+        cout << token  << '\n';
         encodedText += tabelaCodigos[token];
         encodedText += tabelaCodigos[" "];
         token = strtok(nullptr, " ");
@@ -219,6 +223,7 @@ string decodeArquivoPalavra(ArqHuffmanPalavra *arq){
     for(int i = 0; i < arq->nBytes; i++){
         buffer += vetorBytes[i].to_string();
     }
+
          
     return decodeBitString(buffer, arq->tabelaCodigos);
 }

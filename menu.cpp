@@ -98,8 +98,8 @@ void decodificarArquivoCaractere(){
 void codificarArquivoPalavra(){
     
     string nomeArq = "salve.txt", outFile;
-	/* cout << "Digite o nome do arquivo a ser codificado: ";
-	cin >> nomeArq; */
+	cout << "Digite o nome do arquivo a ser codificado: ";
+	cin >> nomeArq;
 	outFile = nomeArq + ".huf";
 
 	cout << "Codificando...\n";
@@ -108,20 +108,25 @@ void codificarArquivoPalavra(){
 	arq->lerArquivo();
 
     ArvoreHPalavra raiz = construirArvoreHuffmanPalavra(arq->conteudoArq);
+    cout << raiz->freq << '\n';
     auto tabelaCodigos = gerarTabelaCodigosPalavra(raiz);
     
     string stringBinaria = gerarBitStringPalavra(arq->conteudoArq, tabelaCodigos);
 	Arquivo::escreverArquivoBinarioPalavra(stringBinaria, tabelaCodigos, outFile);
 
-    cout << stringBinaria << '\n';
+    cout << "\nArquivo codificado com sucesso!\n";
+
+    auto end = chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
+    cout << "Tempo de execucao: " << duration.count() / (1000000.0) << " segundos" << '\n';
 
 }
 
 void decodificarArquivoPalavra(){
 
 	string nomeArq = "salve.txt.huf", outFile;
-	/* cout << "Digite o nome do arquivo a ser decodificado: ";
-	cin >> nomeArq; */
+	cout << "Digite o nome do arquivo a ser decodificado: ";
+	cin >> nomeArq;
 	
 	cout << "Decodificando...\n";
     auto start = std::chrono::high_resolution_clock::now();

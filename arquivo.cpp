@@ -54,14 +54,14 @@ void Arquivo::escreverArquivoBinarioPalavra(string stringBinaria, TabelaHuffmanP
     FILE *file = fopen(filename.c_str(), "wb");
     fwrite(&cab, sizeof(CabecalhoHuffman), 1, file);
 
+    cout << "aqui";
+
     for (auto pair : tabela) {
         key_size = pair.first.length();
         value_size = pair.second.length();
 
-        cout << "wordd: " << pair.first << " | freq: " << pair.second << '\n';
-
         fwrite(&key_size, sizeof(size_t), 1, file);
-        fwrite(pair.first.c_str(), MAX_WORD_LENGTH, 1, file);
+        fwrite(pair.first.c_str(), key_size, 1, file);
         fwrite(&value_size, sizeof(size_t), 1, file);
         fwrite(pair.second.c_str(), value_size, 1, file);
     }
@@ -130,7 +130,7 @@ ArqHuffmanPalavra* Arquivo::lerArquivoCodificadoPalavra(string filename){
     for(int i = 0; i < cab->tamTabela; i++){
         key.resize(MAX_WORD_LENGTH);
         fread(&key_size, sizeof(size_t), 1, file);
-        fread((char*)(key.data()), MAX_WORD_LENGTH, 1, file);
+        fread((char*)(key.data()), key_size, 1, file);
         key.resize(key_size);
 
         fread(&value_size, sizeof(size_t), 1, file);

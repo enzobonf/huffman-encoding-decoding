@@ -64,7 +64,7 @@ void codificarArquivoCaractere(){
 	auto tabelaCodigos = gerarTabelaCodigosChar(raiz);
 
 	string stringBinaria = gerarBitStringCaractere(arq->conteudoArq, tabelaCodigos);
-	Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, outFile);
+	Arquivo::escreverArquivoBinarioCaractere(stringBinaria, tabelaCodigos, outFile);
 
 	cout << "\nArquivo codificado com sucesso!\n";
     auto end = chrono::high_resolution_clock::now();
@@ -97,9 +97,9 @@ void decodificarArquivoCaractere(){
 
 void codificarArquivoPalavra(){
     
-    string nomeArq, outFile;
-	cout << "Digite o nome do arquivo a ser codificado: ";
-	cin >> nomeArq;
+    string nomeArq = "salve.txt", outFile;
+	/* cout << "Digite o nome do arquivo a ser codificado: ";
+	cin >> nomeArq; */
 	outFile = nomeArq + ".huf";
 
 	cout << "Codificando...\n";
@@ -109,25 +109,24 @@ void codificarArquivoPalavra(){
 
     ArvoreHPalavra raiz = construirArvoreHuffmanPalavra(arq->conteudoArq);
     auto tabelaCodigos = gerarTabelaCodigosPalavra(raiz);
-
+    
     string stringBinaria = gerarBitStringPalavra(arq->conteudoArq, tabelaCodigos);
-    cout << stringBinaria.length() / 8 << endl;
-	Arquivo::escreverArquivoBinario(stringBinaria, tabelaCodigos, outFile);
+	Arquivo::escreverArquivoBinarioPalavra(stringBinaria, tabelaCodigos, outFile);
+
+    cout << stringBinaria << '\n';
 
 }
 
 void decodificarArquivoPalavra(){
 
-	string nomeArq, outFile;
-	cout << "Digite o nome do arquivo a ser decodificado: ";
-	cin >> nomeArq;
+	string nomeArq = "salve.txt.huf", outFile;
+	/* cout << "Digite o nome do arquivo a ser decodificado: ";
+	cin >> nomeArq; */
 	
 	cout << "Decodificando...\n";
     auto start = std::chrono::high_resolution_clock::now();
 
 	ArqHuffmanPalavra *arquivoLido = Arquivo::lerArquivoCodificadoPalavra(nomeArq);
-
-    //cout << arquivoLido->vetorBytes[58929461][1] << '\n';
 
 	auto arquivoDecodificado = decodeArquivoPalavra(arquivoLido);
 	Arquivo::escreverArquivoDecodificado(arquivoDecodificado, nomeArq + ".decoded");

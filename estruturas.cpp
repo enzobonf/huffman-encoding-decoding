@@ -26,7 +26,7 @@ ArvoreHChar construirArvoreHuffmanChar(string text){
 ArvoreHPalavra construirArvoreHuffmanPalavra(string text){
     unordered_map<string, int> freq;
     string str, delimiters = ".,;:!?\"=<>()#@-*\n";
-    for(char ch : text){ // O(tamanho do texto em caracteres)
+    /* for(char ch : text){ // O(tamanho do texto em caracteres)
         if(delimiters.find_first_of(ch) != string::npos){
             str += ' ';
             str += ch;
@@ -47,13 +47,29 @@ ArvoreHPalavra construirArvoreHuffmanPalavra(string text){
         freq[token]++;
         freq[" "]++;
         token = strtok(nullptr, " ");
+    } */
+
+    string palavra; size_t len = text.size();
+    for(size_t i = 0; i < len; i++){
+        if(text[i] == ' ' || delimiters.find_first_of(text[i]) != string::npos){
+            string del = text.substr(i, 1); // delimitador convertido para string
+            freq[palavra]++;
+            freq[del]++;
+            palavra = "";
+        }
+        else {
+            palavra += text[i];
+            if(i == len - 1){
+                freq[palavra]++;
+            }
+        }
     }
 
     priority_queue<NoPalavra*, vector<NoPalavra*>, Compare<NoPalavra*>> fila;
 
     for(auto pair : freq){ // O(n de caracteres diferentes no texto)
         // first = caractere | second = frequencia
-        //cout << "word: " << pair.first << " | freq: " << pair.second << '\n';
+        cout << "word: " << pair.first << " | freq: " << pair.second << '\n';
         fila.push(new NoPalavra(pair.first, pair.second));
     }
 
@@ -96,6 +112,7 @@ void gerarTabelaCodigosPalavraAux(ArvoreHPalavra raiz, string str, TabelaHuffman
 
     if(!raiz->esq && !raiz->dir){ // folha
         tabelaCodigos[raiz->palavra] = str; //adiciona o código na tabela;
+        //cout << "word: " << raiz->palavra << " | cod: " << str << '\n';
     }
 
     gerarTabelaCodigosPalavraAux(raiz->esq, str + "0", tabelaCodigos);
@@ -126,25 +143,23 @@ string gerarBitStringCaractere(string conteudoArq, TabelaHuffmanChar tabelaCodig
 string gerarBitStringPalavra(string conteudoArq, TabelaHuffmanPalavra tabelaCodigos){
     string encodedText = "", str = "", delimiters = ".,;:!?\"=<>()#@-*\n";
 
-    for(char ch : conteudoArq){ // O(tamanho do texto em caracteres)
-        if(delimiters.find_first_of(ch) != string::npos){
-            str += ' ';
-            str += ch;
-            str += ' ';
+    string palavra; size_t len = conteudoArq.size();
+    for(size_t i = 0; i < len; i++){
+        //if(conteudoArq[i] == ' ' || conteudoArq[i] == '\n'){
+        if(conteudoArq[i] == ' ' || delimiters.find_first_of(conteudoArq[i]) != string::npos){
+            string del = conteudoArq.substr(i, 1); // delimitador convertido para string
+            encodedText += tabelaCodigos[palavra];
+            encodedText += tabelaCodigos[del];
+            cout << palavra << " " << tabelaCodigos[palavra] << '\n';
+            palavra = "";
         }
-        else{
-            str += ch;
+        else {
+            palavra += conteudoArq[i];
+            if(i == len - 1) {
+                encodedText += tabelaCodigos[palavra];
+                cout << tabelaCodigos[palavra] << '\n';
+            }
         }
-    }
-
-    cout << str << endl;
-
-    char *token = strtok((char *)str.c_str(), " ");
-    while(token != nullptr){
-        cout << token  << '\n';
-        encodedText += tabelaCodigos[token];
-        encodedText += tabelaCodigos[" "];
-        token = strtok(nullptr, " ");
     }
 
     return encodedText;
@@ -154,7 +169,8 @@ string gerarBitStringPalavra(string conteudoArq, TabelaHuffmanPalavra tabelaCodi
 void gerarBitset(string bitString, vector<bitset<8>> &bit_set, short &nFillBits){
     string byteStr = "";
     size_t sizeStr = bitString.size();
-    nFillBits = sizeStr % 8;
+    //nFillBits = sizeStr % 8;
+    nFillBits = (8 - (sizeStr % 8)) % 8;
     //bitString += string(nFillBits, '0'); // completa o último byte com zeros à direita caso seja preciso
     
     for(int i = 0; i < sizeStr; i += 8){
@@ -195,6 +211,8 @@ string decodeBitString(string bitString, TabelaHuffmanPalavra tabelaCodigos){
         cout << "word: " << pair.second << " | cod: " << pair.first << '\n';
     } */
 
+    cout << bitString;
+
     for(char bit : bitString){
         buffer += bit;
         if(tabelaInvertida[buffer].length() > 0){
@@ -224,6 +242,12 @@ string decodeArquivoPalavra(ArqHuffmanPalavra *arq){
         buffer += vetorBytes[i].to_string();
     }
 
+    cout << buffer << '\n';
+
+    for(auto pair : arq->tabelaCodigos){ // O(n de caracteres diferentes no texto)
+        // first = caractere | second = frequencia
+        cout << "word: " << pair.first << " | cod: " << pair.second << '\n';
+    }
          
     return decodeBitString(buffer, arq->tabelaCodigos);
 }

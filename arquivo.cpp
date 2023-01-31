@@ -19,7 +19,7 @@ void Arquivo::lerArquivo(){
     this->conteudoArq = buffer.str();
 }
 
-void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tabela, string filename){
+void Arquivo::escreverArquivoBinarioCaractere(string stringBinaria, TabelaHuffmanChar tabela, string filename){
     vector<bitset<8>> vetorBytes; short nFillBits; 
     gerarBitset(stringBinaria, vetorBytes, nFillBits);
 
@@ -43,7 +43,7 @@ void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanChar tab
     fclose(file);
 }
 
-void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanPalavra tabela, string filename){
+void Arquivo::escreverArquivoBinarioPalavra(string stringBinaria, TabelaHuffmanPalavra tabela, string filename){
     vector<bitset<8>> vetorBytes; short nFillBits; 
     gerarBitset(stringBinaria, vetorBytes, nFillBits);
 
@@ -57,8 +57,11 @@ void Arquivo::escreverArquivoBinario(string stringBinaria, TabelaHuffmanPalavra 
     for (auto pair : tabela) {
         key_size = pair.first.length();
         value_size = pair.second.length();
+
+        cout << "wordd: " << pair.first << " | freq: " << pair.second << '\n';
+
         fwrite(&key_size, sizeof(size_t), 1, file);
-        fwrite(pair.first.c_str(), key_size, 1, file);
+        fwrite(pair.first.c_str(), MAX_WORD_LENGTH, 1, file);
         fwrite(&value_size, sizeof(size_t), 1, file);
         fwrite(pair.second.c_str(), value_size, 1, file);
     }
@@ -116,7 +119,7 @@ ArqHuffmanPalavra* Arquivo::lerArquivoCodificadoPalavra(string filename){
     CabecalhoHuffman *cab = (CabecalhoHuffman*) malloc(sizeof(CabecalhoHuffman));
     TabelaHuffmanPalavra tabela; 
     vector<bitset<8>> vetorBytes;
-    string key; size_t key_size, value_size; string value;
+    string key, value; size_t key_size, value_size;
 
     fseek(file, 0, SEEK_SET);
     fread(cab, sizeof(CabecalhoHuffman), 1, file);
@@ -125,10 +128,10 @@ ArqHuffmanPalavra* Arquivo::lerArquivoCodificadoPalavra(string filename){
     cout << "n bytes: " << cab->nBytes << " | tam tabela: " << cab->tamTabela << " | n fill: " << cab->nFillBits << '\n';
 
     for(int i = 0; i < cab->tamTabela; i++){
-
+        key.resize(MAX_WORD_LENGTH);
         fread(&key_size, sizeof(size_t), 1, file);
+        fread((char*)(key.data()), MAX_WORD_LENGTH, 1, file);
         key.resize(key_size);
-        fread((char*)(key.data()), key_size, 1, file);
 
         fread(&value_size, sizeof(size_t), 1, file);
         tabela[key].resize(value_size);

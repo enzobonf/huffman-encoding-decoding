@@ -1,8 +1,9 @@
 #include "menu.h"
 #include "arquivo.h"
 
+// Construtor padrão do menu
 // Pré-condição: Nenhuma
-// Pós-condição: As opções do menu são inicializadas
+// Pós-condição: Um objeto do tipo Menu com as opções padrão é criado e inicializado.
 Menu::Menu(){
     this->opcoes = {
         "Codificar arquivo - codificacao por caractere",
@@ -12,10 +13,16 @@ Menu::Menu(){
     };
 }
 
+// Adiciona uma nova opção ao menu.
+// Pré-condição: opcao é uma string válida.
+// Pós-condição: A string opcao é adicionada ao vetor de opções do menu
 void Menu::novaOpcao(string opcao) {
     this->opcoes.push_back(opcao);
 }
 
+ // Mostra as opções do menu.
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: As opções do menu são exibidas na tela.
 void Menu::mostrarOpcoes() {
     cout << "\nSelecione uma das opcoes abaixo\n\n";
     for (int i = 0; i < this->opcoes.size(); i++) {
@@ -24,6 +31,10 @@ void Menu::mostrarOpcoes() {
     cout << "0 - Sair" << '\n';
 }
 
+// Mostra as opções do menu.
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: As opções do menu são exibidas na tela, 
+// e a opção do usuário é pedida
 void Menu::mostrar() {
     int opcao = -1;
     while(opcao != 0){
@@ -32,16 +43,16 @@ void Menu::mostrar() {
 
         switch(opcao){
             case 1:
-                codificarArquivoCaractere();
+                this->codificarArquivoCaractere();
                 break;
             case 2:
-                decodificarArquivoCaractere();
+                this->decodificarArquivoCaractere();
                 break;
             case 3:
-                codificarArquivoPalavra();
+                this->codificarArquivoPalavra();
                 break;
             case 4:
-                decodificarArquivoPalavra();
+                this->decodificarArquivoPalavra();
                 break;
             default:
                 break;
@@ -49,7 +60,20 @@ void Menu::mostrar() {
     }
 }
 
-void codificarArquivoCaractere(){
+void Menu::startCronometro(){
+    this->start = std::chrono::high_resolution_clock::now();
+}
+
+void Menu::stopCronometro(){
+    this->end = std::chrono::high_resolution_clock::now();
+    auto duration = chrono::duration_cast<chrono::microseconds>(end - this->start);
+    cout << "Tempo de execucao: " << duration.count() / (1000000.0) << " segundos" << '\n';
+}
+
+// Encaminha a codificação por caractere
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: arquivo codificado é salvo
+void Menu::codificarArquivoCaractere(){
 	string nomeArq, outFile;
 	cout << "Digite o nome do arquivo a ser codificado: ";
 	cin >> nomeArq;
@@ -72,8 +96,10 @@ void codificarArquivoCaractere(){
     cout << "Tempo de execucao: " << duration.count() / (1000000.0) << " segundos" << '\n';
 }
 
-void decodificarArquivoCaractere(){
-
+// Encaminha a decodificação por caractere
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: arquivo decodificado é salvo
+void Menu::decodificarArquivoCaractere(){
 	string nomeArq, outFile;
 	cout << "Digite o nome do arquivo a ser decodificado: ";
 	cin >> nomeArq;
@@ -82,9 +108,6 @@ void decodificarArquivoCaractere(){
     auto start = std::chrono::high_resolution_clock::now();
 
 	ArqHuffmanChar *arquivoLido = Arquivo::lerArquivoCodificadoCaractere(nomeArq);
-
-    //cout << arquivoLido->vetorBytes[58929461][1] << '\n';
-
 	auto arquivoDecodificado = decodeArquivoCaractere(arquivoLido);
 	Arquivo::escreverArquivoDecodificado(arquivoDecodificado, nomeArq + ".decoded");
 
@@ -95,50 +118,45 @@ void decodificarArquivoCaractere(){
     cout << "Tempo de execucao: " << duration.count() / (1000000.0) << " segundos" << '\n';
 }
 
-void codificarArquivoPalavra(){
-    
+// Encaminha a codificação por palavra
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: arquivo ccodificado é salvo
+void Menu::codificarArquivoPalavra(){
     string nomeArq = "salve.txt", outFile;
 	cout << "Digite o nome do arquivo a ser codificado: ";
 	cin >> nomeArq;
 	outFile = nomeArq + ".huf";
 
 	cout << "Codificando...\n";
-    auto start = std::chrono::high_resolution_clock::now();
+    this->startCronometro();
 	Arquivo *arq = new Arquivo(nomeArq);
 	arq->lerArquivo();
 
     ArvoreHPalavra raiz = construirArvoreHuffmanPalavra(arq->conteudoArq);
-    cout << raiz->freq << '\n';
     auto tabelaCodigos = gerarTabelaCodigosPalavra(raiz);
-    
+
     string stringBinaria = gerarBitStringPalavra(arq->conteudoArq, tabelaCodigos);
 	Arquivo::escreverArquivoBinarioPalavra(stringBinaria, tabelaCodigos, outFile);
 
     cout << "\nArquivo codificado com sucesso!\n";
-
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-    cout << "Tempo de execucao: " << duration.count() / (1000000.0) << " segundos" << '\n';
-
+    this->stopCronometro();
 }
 
-void decodificarArquivoPalavra(){
-
+// Encaminha a decodificação por palavra
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: arquivo decodificado é salvo
+void Menu::decodificarArquivoPalavra(){
 	string nomeArq = "salve.txt.huf", outFile;
 	cout << "Digite o nome do arquivo a ser decodificado: ";
 	cin >> nomeArq;
 	
 	cout << "Decodificando...\n";
-    auto start = std::chrono::high_resolution_clock::now();
+    this->startCronometro();
 
 	ArqHuffmanPalavra *arquivoLido = Arquivo::lerArquivoCodificadoPalavra(nomeArq);
-
 	auto arquivoDecodificado = decodeArquivoPalavra(arquivoLido);
 	Arquivo::escreverArquivoDecodificado(arquivoDecodificado, nomeArq + ".decoded");
 
 	cout << "\nArquivo decodificado com sucesso!\n";
-
-    auto end = chrono::high_resolution_clock::now();
-    auto duration = chrono::duration_cast<chrono::microseconds>(end - start);
-    cout << "Tempo de execucao: " << duration.count() / (1000000.0) << " segundos" << '\n';
+    this->stopCronometro();
 }

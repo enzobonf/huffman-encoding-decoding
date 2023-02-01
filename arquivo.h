@@ -7,6 +7,7 @@
 #include <bitset>
 #include <cstdio>
 #include <string.h>
+#include <locale>
 #include "estruturas.h"
 
 using namespace std;

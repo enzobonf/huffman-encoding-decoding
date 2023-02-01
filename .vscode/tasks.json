@@ -6,7 +6,6 @@
             "label": "C/C++: g++.exe compilar",
             "command": "C:\\MinGW\\bin\\g++.exe",
             "args": [
-                "-fdiagnostics-color=always",
                 "-g",
                 "${workspaceFolder}\\*.cpp",
                 "-o",

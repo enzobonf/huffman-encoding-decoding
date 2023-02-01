@@ -157,6 +157,10 @@ void Menu::decodificarArquivoPalavra(){
 	auto arquivoDecodificado = decodeArquivoPalavra(arquivoLido);
 	Arquivo::escreverArquivoDecodificado(arquivoDecodificado, nomeArq + ".decoded");
 
+    /* for(auto pair:arquivoLido->tabelaCodigos){
+        cout << "word: " << pair.first << " | cod: " << pair.second << '\n';
+    } */
+
 	cout << "\nArquivo decodificado com sucesso!\n";
     this->stopCronometro();
 }

@@ -187,13 +187,14 @@ unordered_map<TKey, TValue> inverterTabela(unordered_map<TValue, TKey> tabelaCod
 }
 
 string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
-    string buffer = "", resultado = "";
+    string buffer = "", resultado = ""; char buscaTabela;
     auto tabelaInvertida = inverterTabela(tabelaCodigos);
     for(char bit : bitString){
         buffer += bit;
 
-        if(tabelaInvertida[buffer]){
-            resultado += tabelaInvertida[buffer];
+        buscaTabela = tabelaInvertida[buffer];
+        if(buscaTabela){
+            resultado += buscaTabela;
             buffer = "";
         }
     }
@@ -202,10 +203,8 @@ string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 }
 
 string decodeBitString(string bitString, TabelaHuffmanPalavra tabelaCodigos){
-    string buffer = "", resultado = "";
+    string buffer = "", resultado = "", *buscaTabela;
     auto tabelaInvertida = inverterTabela(tabelaCodigos);
-
-    //cout << bitString;
 
     for(char bit : bitString){
         buffer += bit;

@@ -55,6 +55,7 @@
         "xhash": "cpp",
         "chrono": "cpp",
         "ratio": "cpp",
-        "sstream": "cpp"
+        "sstream": "cpp",
+        "codecvt": "cpp"
     }
 }

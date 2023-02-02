@@ -182,11 +182,7 @@ string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 
 string decodeBitString(string bitString, TabelaHuffmanPalavra tabelaCodigos){
     string buffer = "", resultado = "", buscaTabela;
-    auto start = std::chrono::high_resolution_clock::now();
     auto tabelaInvertida = inverterTabela(tabelaCodigos);
-    auto end = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<chrono::microseconds>(end - start);
-    cout << "Tempo de inverter tabela: " << duration.count() / (1000000.0) << " segundos" << '\n';
 
     for(char bit : bitString){
         buffer += bit;

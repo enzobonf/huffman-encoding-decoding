@@ -29,16 +29,6 @@ class Menu {
       std::chrono::time_point<std::chrono::high_resolution_clock> start;
       std::chrono::time_point<std::chrono::high_resolution_clock> end;
     public:
-      // Construtor padrão do menu
-      // Pré-condição: Nenhuma
-      // Pós-condição: Um objeto do tipo Menu com as opções padrão é criado e inicializado.
-      Menu();
-
-      // Adiciona uma nova opção ao menu.
-      // Pré-condição: opcao é uma string válida.
-      // Pós-condição: A string opcao é adicionada ao vetor de opções do menu
-      void novaOpcao(string opcao);
-
       // Mostra as opções do menu.
       // Pré-condição: O menu deve estar inicializado
       // Pós-condição: As opções do menu são exibidas na tela, 

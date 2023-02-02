@@ -1,34 +1,16 @@
 #include "menu.h"
 #include "arquivo.h"
 
-// Construtor padrão do menu
-// Pré-condição: Nenhuma
-// Pós-condição: Um objeto do tipo Menu com as opções padrão é criado e inicializado.
-Menu::Menu(){
-    this->opcoes = {
-        "Codificar arquivo - codificacao por caractere",
-        "Decodificar arquivo - codificacao por caractere",
-        "Codificar arquivo - codificacao por palavra",
-        "Decodificar arquivo - codificacao por palavra"
-    };
-}
-
-// Adiciona uma nova opção ao menu.
-// Pré-condição: opcao é uma string válida.
-// Pós-condição: A string opcao é adicionada ao vetor de opções do menu
-void Menu::novaOpcao(string opcao) {
-    this->opcoes.push_back(opcao);
-}
-
- // Mostra as opções do menu.
+// Mostra as opções do menu.
 // Pré-condição: O menu deve estar inicializado
 // Pós-condição: As opções do menu são exibidas na tela.
 void Menu::mostrarOpcoes() {
     cout << "\nSelecione uma das opcoes abaixo\n\n";
-    for (int i = 0; i < this->opcoes.size(); i++) {
-        cout << i + 1 << " - " << this->opcoes[i] << endl;
-    }
-    cout << "0 - Sair" << '\n';
+    cout << "1 - Codificar arquivo - codificacao por caractere" << '\n'
+         << "2 - Decodificar arquivo - codificacao por caractere" << '\n'
+         << "3 - Codificar arquivo - codificacao por palavra" << '\n'
+         << "4 - Decodificar arquivo - codificacao por palavra" << '\n'
+         << "0 - Sair" << '\n';
 }
 
 // Mostra as opções do menu.
@@ -60,10 +42,16 @@ void Menu::mostrar() {
     }
 }
 
+// Inicia o cronômetro para contar o tempo de execução
+// Pré-condição: O menu deve estar inicializado
+// Pós-condição: a variável start recebe o tempo atual
 void Menu::startCronometro(){
     this->start = std::chrono::high_resolution_clock::now();
 }
 
+// Para o cronômetro e mostra o tempo total de execução na tela
+// Pré-condição: o cronômetro foi iniciado
+// Pós-condição: o cronômetro é parado e o tempo de execução é mostrado
 void Menu::stopCronometro(){
     this->end = std::chrono::high_resolution_clock::now();
     auto duration = chrono::duration_cast<chrono::microseconds>(end - this->start);
@@ -157,9 +145,9 @@ void Menu::decodificarArquivoPalavra(){
 	auto arquivoDecodificado = decodeArquivoPalavra(arquivoLido);
 	Arquivo::escreverArquivoDecodificado(arquivoDecodificado, nomeArq + ".decoded");
 
-    /* for(auto pair:arquivoLido->tabelaCodigos){
+    for(auto pair:arquivoLido->tabelaCodigos){
         cout << "word: " << pair.first << " | cod: " << pair.second << '\n';
-    } */
+    }
 
 	cout << "\nArquivo decodificado com sucesso!\n";
     this->stopCronometro();

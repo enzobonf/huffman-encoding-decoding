@@ -26,28 +26,6 @@ ArvoreHChar construirArvoreHuffmanChar(string text){
 ArvoreHPalavra construirArvoreHuffmanPalavra(string text){
     unordered_map<string, int> freq;
     string str, delimiters = ".,;:!/?\"=<>()#@-*\n";
-    /* for(char ch : text){ // O(tamanho do texto em caracteres)
-        if(delimiters.find_first_of(ch) != string::npos){
-            str += ' ';
-            str += ch;
-            str += ' ';
-            freq[" "] -= 2;
-        }
-        else{
-            str += ch;
-        }
-    }
-
-    cout << str << endl;
-    char *token = strtok((char *)str.c_str(), " ");
-
-
-    while(token != nullptr){
-        //cout << token  << '\n';
-        freq[token]++;
-        freq[" "]++;
-        token = strtok(nullptr, " ");
-    } */
 
     string palavra; size_t len = text.size();
     for(size_t i = 0; i < len; i++){
@@ -203,13 +181,14 @@ string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 }
 
 string decodeBitString(string bitString, TabelaHuffmanPalavra tabelaCodigos){
-    string buffer = "", resultado = "", *buscaTabela;
+    string buffer = "", resultado = "", buscaTabela;
     auto tabelaInvertida = inverterTabela(tabelaCodigos);
 
     for(char bit : bitString){
         buffer += bit;
-        if(tabelaInvertida[buffer].length() > 0){
-            resultado += tabelaInvertida[buffer];
+        buscaTabela = "" + tabelaInvertida[buffer];
+        if(buscaTabela.length() > 0){
+            resultado += buscaTabela;
             buffer = "";
         }
     }

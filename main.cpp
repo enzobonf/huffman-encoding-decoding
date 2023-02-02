@@ -5,7 +5,7 @@ int main() {
 
   setlocale(LC_ALL, "Portuguese");
   
-  Menu *menu = new Menu;
+  Menu *menu = new Menu();
   menu->mostrar();
 
 

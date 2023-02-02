@@ -16,7 +16,15 @@ class Menu {
       // Pós-condição: As opções do menu são exibidas na tela, 
       // e a opção do usuário é pedida
       void mostrarOpcoes();
+
+      // Inicia o cronômetro para contar o tempo de execução
+      // Pré-condição: O menu deve estar inicializado
+      // Pós-condição: a variável start recebe o tempo atual
       void startCronometro();
+
+      // Para o cronômetro e mostra o tempo total de execução na tela
+      // Pré-condição: o cronômetro foi iniciado
+      // Pós-condição: o cronômetro é parado e o tempo de execução é mostrado
       void stopCronometro();
       std::chrono::time_point<std::chrono::high_resolution_clock> start;
       std::chrono::time_point<std::chrono::high_resolution_clock> end;

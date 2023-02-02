@@ -15,7 +15,7 @@ using namespace std;
 #ifndef ARQUIVO_H
 #define ARQUIVO_H
 
-#define MAX_WORD_LENGTH 20
+#define MAX_WORD_LENGTH 40
 
 class Arquivo {
     private:

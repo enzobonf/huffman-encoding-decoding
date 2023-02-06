@@ -3,10 +3,16 @@
 
 using namespace std;
 
+// Construtor da classe arquivo, inicializa o nome do arquivo
+// Pré-condição: deve ser passado um nome de arquivo válido
+// Pós-condição: o nome do arquivo é colocado no objeto Arquivo.
 Arquivo::Arquivo(string nomeArq){
     this->nomeArq = nomeArq;
 }
 
+// Lê todo o conteúdo do arquivo
+// Pré-condição: o arquivo deve estar inicializado
+// Pós-condição: o conteúdo é colocado na variável conteudoArq no objeto
 void Arquivo::lerArquivo(){
     ifstream fin(this->nomeArq.c_str());
     string arqCompleto;
@@ -19,11 +25,14 @@ void Arquivo::lerArquivo(){
     this->conteudoArq = buffer.str();
 }
 
+// Escreve uma string binária e o cabeçalho de codificação por caractere num arquivo binário
+// Pré-condição: a string binária, a tabela de códigos e o nome do arquivo devem ser válidos
+// Pós-condição: o arquivo binário é escrito
 void Arquivo::escreverArquivoBinarioCaractere(string stringBinaria, TabelaHuffmanChar tabela, string filename){
     vector<bitset<8>> vetorBytes; short nFillBits; 
     gerarBitset(stringBinaria, vetorBytes, nFillBits);
 
-    unsigned int map_size = tabela.size();
+    size_t map_size = tabela.size(), value_size;
     CabecalhoHuffman cab = {vetorBytes.size(), map_size, nFillBits};
 
     FILE *file = fopen(filename.c_str(), "wb");
@@ -31,7 +40,7 @@ void Arquivo::escreverArquivoBinarioCaractere(string stringBinaria, TabelaHuffma
 
     for (auto pair : tabela) {
         fwrite(&pair.first, sizeof(char), 1, file);
-        size_t value_size = pair.second.length();
+        value_size = pair.second.length();
         fwrite(&value_size, sizeof(size_t), 1, file);
         fwrite(pair.second.c_str(), value_size, 1, file);
     }
@@ -43,12 +52,14 @@ void Arquivo::escreverArquivoBinarioCaractere(string stringBinaria, TabelaHuffma
     fclose(file);
 }
 
+// Escreve uma string binária e o cabeçalho de codificação por palavra num arquivo binário
+// Pré-condição: a string binária, a tabela de códigos e o nome do arquivo devem ser válidos
+// Pós-condição: o arquivo binário é escrito
 void Arquivo::escreverArquivoBinarioPalavra(string stringBinaria, TabelaHuffmanPalavra tabela, string filename){
     vector<bitset<8>> vetorBytes; short nFillBits; 
     gerarBitset(stringBinaria, vetorBytes, nFillBits);
 
-    unsigned int map_size = tabela.size();
-    size_t key_size, value_size;
+    size_t map_size = tabela.size(), key_size, value_size;
     CabecalhoHuffman cab = {vetorBytes.size(), map_size, nFillBits};
 
     FILE *file = fopen(filename.c_str(), "wb");
@@ -73,12 +84,18 @@ void Arquivo::escreverArquivoBinarioPalavra(string stringBinaria, TabelaHuffmanP
     fclose(file);
 }
 
+// Escreve uma string comum (arquivo decodificado) no arquivo
+// Pré-condição: string e nome de arquivo válido
+// Pós-condição: o conteúdo decodificado é escrito no arquivo
 void Arquivo::escreverArquivoDecodificado(string str, string filename){
     ofstream fout(filename.c_str());
     fout.write(str.c_str(), str.size());
     fout.close();
 }
 
+// Lê um arquivo binário feito via codificação por caractere
+// Pré-condição: o arquivo é um arquivo codificado por caractere válido
+// Pós-condição: o objeto do arquivo é retornado com as informações para a decodificação
 ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
 
     FILE *file = fopen(filename.c_str(), "rb+");
@@ -112,6 +129,9 @@ ArqHuffmanChar* Arquivo::lerArquivoCodificadoCaractere(string filename){
     
 }
 
+// Lê um arquivo binário feito via codificação por palavra
+// Pré-condição: o arquivo é um arquivo codificado por palavra válido
+// Pós-condição: o objeto do arquivo é retornado com as informações para a decodificação
 ArqHuffmanPalavra* Arquivo::lerArquivoCodificadoPalavra(string filename){
 
     FILE *file = fopen(filename.c_str(), "rb+");

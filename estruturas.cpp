@@ -1,5 +1,8 @@
 #include "estruturas.h"
 
+// Gera a árvore huffman de codificação via caractere a partir do texto
+// Pré-condição: ser passado um texto não-vazio
+// Pós-condição: a raíz da árvore construida é retornada
 ArvoreHChar construirArvoreHuffmanChar(string text){
     unordered_map<char, int> freq;
     for(char ch : text){ // O(tamanho do texto em caracteres)
@@ -23,6 +26,9 @@ ArvoreHChar construirArvoreHuffmanChar(string text){
     return fila.top();
 }
 
+// Gera a árvore huffman de codificação via palavra a partir do texto
+// Pré-condição: ser passado um texto não-vazio
+// Pós-condição: a raíz da árvore construida é retornada
 ArvoreHPalavra construirArvoreHuffmanPalavra(string text){
     unordered_map<string, int> freq;
     string str, delimiters = ".,;:!/?\"=<>()#@-*\n";
@@ -62,6 +68,11 @@ ArvoreHPalavra construirArvoreHuffmanPalavra(string text){
     return fila.top();
 }
 
+
+// Função auxiliar que cria a tabela de códigos por caractere
+// percorrendo a árvore recursivamente
+// Pré-condição: raiz válida da árvore, string válida e tabela inicializada
+// Pós-condição: tabela de códigos preenchida
 void gerarTabelaCodigosCharAux(ArvoreHChar raiz, string str, TabelaHuffmanChar &tabelaCodigos){
 
     if(raiz == nullptr) return;
@@ -75,6 +86,9 @@ void gerarTabelaCodigosCharAux(ArvoreHChar raiz, string str, TabelaHuffmanChar &
 
 }
 
+// Gera uma tabela de códigos a partir da árvore de caracteres (tabela hash)
+// Pré-condição: Objeto válido da árvore
+// Pós-condição: A tabela é criada e preenchida com os caracteres e seus códigos
 TabelaHuffmanChar gerarTabelaCodigosChar(ArvoreHChar raiz){
 
     unordered_map<char, string> tabelaCodigos;
@@ -85,13 +99,16 @@ TabelaHuffmanChar gerarTabelaCodigosChar(ArvoreHChar raiz){
 
 }
 
+// Função auxiliar que cria a tabela de códigos por palavra
+// percorrendo a árvore recursivamente
+// Pré-condição: raiz válida da árvore, string válida e tabela inicializada
+// Pós-condição: tabela de códigos preenchida
 void gerarTabelaCodigosPalavraAux(ArvoreHPalavra raiz, string str, TabelaHuffmanPalavra &tabelaCodigos){
 
     if(raiz == nullptr) return;
 
     if(!raiz->esq && !raiz->dir){ // folha
         tabelaCodigos[raiz->palavra] = str; //adiciona o código na tabela;
-        //cout << "word: " << raiz->palavra << " | cod: " << str << '\n';
     }
 
     gerarTabelaCodigosPalavraAux(raiz->esq, str + "0", tabelaCodigos);
@@ -99,6 +116,9 @@ void gerarTabelaCodigosPalavraAux(ArvoreHPalavra raiz, string str, TabelaHuffman
 
 }
 
+// Gera uma tabela de códigos a partir da árvore de palavras (tabela hash)
+// Pré-condição: Objeto válido da árvore
+// Pós-condição: A tabela é criada e preenchida com as palavras e seus códigos
 TabelaHuffmanPalavra gerarTabelaCodigosPalavra(ArvoreHPalavra raiz){
 
     unordered_map<string, string> tabelaCodigos;
@@ -109,6 +129,11 @@ TabelaHuffmanPalavra gerarTabelaCodigosPalavra(ArvoreHPalavra raiz){
 
 }
 
+// Gera uma string binária a partir do conteúdo original do arquivo
+// e da tabela de códigos de caracteres
+// Pré-condição: O texto ser o mesmo usado para criação da árvore, e uma 
+// tabela de códigos válida
+// Pós-condição: A string binária é gerada
 string gerarBitStringCaractere(string conteudoArq, TabelaHuffmanChar tabelaCodigos){
     string encodedText = "";
 
@@ -119,6 +144,11 @@ string gerarBitStringCaractere(string conteudoArq, TabelaHuffmanChar tabelaCodig
     return encodedText;
 }
 
+// Gera uma string binária a partir do conteúdo original do arquivo
+// e da tabela de códigos de palavras
+// Pré-condição: O texto ser o mesmo usado para criação da árvore, e uma 
+// tabela de códigos válida
+// Pós-condição: A string binária é gerada
 string gerarBitStringPalavra(string conteudoArq, TabelaHuffmanPalavra tabelaCodigos){
     string encodedText = "", str = "", delimiters = ".,;:!/?\"=<>()#@-*\n";
 
@@ -147,7 +177,6 @@ string gerarBitStringPalavra(string conteudoArq, TabelaHuffmanPalavra tabelaCodi
 void gerarBitset(string bitString, vector<bitset<8>> &bit_set, short &nFillBits){
     string byteStr = "";
     size_t sizeStr = bitString.size();
-    //nFillBits = sizeStr % 8;
     nFillBits = (8 - (sizeStr % 8)) % 8;
     
     for(int i = 0; i < sizeStr; i += 8){
@@ -181,13 +210,14 @@ string decodeBitString(string bitString, TabelaHuffmanChar tabelaCodigos){
 }
 
 string decodeBitString(string bitString, TabelaHuffmanPalavra tabelaCodigos){
-    string buffer = "", resultado = "", buscaTabela;
+    string buffer = "", resultado = "";
     auto tabelaInvertida = inverterTabela(tabelaCodigos);
 
     for(char bit : bitString){
         buffer += bit;
-        if(tabelaInvertida[buffer].length() > 0){
-            resultado += tabelaInvertida[buffer];
+        string buscaTabela = tabelaInvertida[buffer];
+        if(buscaTabela.length() > 0){
+            resultado += buscaTabela;
             buffer = "";
         }
     }

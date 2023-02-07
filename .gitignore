@@ -35,3 +35,6 @@
 *.decoded
 
 big3.txt
+6mb.txt
+32mb.txt
+64mb.txt

@@ -108,7 +108,7 @@ void Menu::decodificarArquivoCaractere(){
 
 // Encaminha a codificação por palavra
 // Pré-condição: O menu deve estar inicializado
-// Pós-condição: arquivo ccodificado é salvo
+// Pós-condição: arquivo codificado é salvo
 void Menu::codificarArquivoPalavra(){
     string nomeArq = "salve.txt", outFile;
 	cout << "Digite o nome do arquivo a ser codificado: ";

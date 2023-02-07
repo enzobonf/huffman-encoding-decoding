@@ -32,7 +32,7 @@ class Menu {
       // Mostra as opções do menu.
       // Pré-condição: O menu deve estar inicializado
       // Pós-condição: As opções do menu são exibidas na tela, 
-      // e a opção do usuário é pedida
+      // e a opção do usuário é solicitada
       void mostrar();
 
       // Encaminha a codificação por caractere
